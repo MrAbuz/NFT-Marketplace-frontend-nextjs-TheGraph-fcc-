@@ -8,6 +8,7 @@ import { ethers } from "ethers"
 import UpdateListingModal from "./UpdateListingModal"
 
 const truncateStr = (fullStr, strLen) => {
+    //code to make the address be like "0x3289d8238d...23d8d898fa0"
     if (fullStr.length <= strLen) return fullStr
 
     const separator = "..."

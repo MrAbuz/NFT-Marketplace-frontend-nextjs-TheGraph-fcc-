@@ -25,6 +25,10 @@ Even tho Moralis adds a centralized component, the bulk of our protocol would st
 Tho there are some protocols that are centralized that are important to the space, like Etherscan, Opensea.
 We're learning Moralis so that we're familiar with working with centralized servers in case we want to make an aplication in the future that provides a centralized service.
 
+With the Graph, we will:
+1. Index them with The Graph
+2. Read from The Graph
+
 As far as I know, Mappings are not loopable, arrays are. So indexed events help us manage the mappings info (and others) to include in our frontends.
 
 Patrick:
