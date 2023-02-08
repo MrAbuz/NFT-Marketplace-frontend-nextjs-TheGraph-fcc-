@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 
 export default function Home() {
     const { chainId, account, isWeb3Enabled } = useMoralis()
+    //chainId comes in the hex format in Moralis. This is how to pass from hex -> int
     const chainString = chainId ? parseInt(chainId).toString() : "31337"
     const marketplaceAddress = networkMapping[chainString].NftMarketplace[0]
     const dispatch = useNotification()
@@ -98,7 +99,7 @@ export default function Home() {
     }
 
     useEffect(() => {
-        if(isWeb3Enabled){
+        if (isWeb3Enabled) {
             setupUI()
         }
     }, [proceeds, account, isWeb3Enabled, chainId])
