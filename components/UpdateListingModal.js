@@ -23,7 +23,7 @@ export default function UpdateListingModal({
             title: "Listing updated - please refresh (and move blocks)",
             position: "topR",
         })
-        onClose && onClose()
+        onClose && onClose() //so pretty sure here it's: we also call onClose when the transaction is sucessfull, besides calling in NFTBox when we close the modal
         setPriceToUpdateListingWith("0")
     }
 

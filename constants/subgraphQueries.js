@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client"
 
 //check graphExample.js in the pages folder for some notes about this
+//created this file just for the queries
 const GET_ACTIVE_ITEMS = gql`
     {
         activeItems(first: 5, where: { buyer: "0x0000000000000000000000000000000000000000" }) {

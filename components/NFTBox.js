@@ -14,8 +14,8 @@ const truncateStr = (fullStr, strLen) => {
     const separator = "..."
     const seperatorLength = separator.length
     const charsToShow = strLen - seperatorLength
-    const frontChars = Math.ceil(charsToShow / 2)
-    const backChars = Math.floor(charsToShow / 2)
+    const frontChars = Math.ceil(charsToShow / 2) //rounds the number up
+    const backChars = Math.floor(charsToShow / 2) //rounds the number down
     return (
         fullStr.substring(0, frontChars) +
         separator +
@@ -29,8 +29,11 @@ export default function NFTBox({ price, nftAddress, tokenId, marketplaceAddress,
     const [tokenName, setTokenName] = useState("")
     const [tokenDescription, setTokenDescription] = useState("")
     const [showModal, setShowModal] = useState(false)
-    const hideModal = () => setShowModal(false)
     const dispatch = useNotification()
+    const hideModal = () => setShowModal(false) //this is super important and if I look at the html its called onclose of the modal (modal is the pop up that appears to update the price)
+    //The reason is that if we dont set it to false when we close, it will remain true. And the next time the box is clicked, instead of updating the showmodal useState to true, to then
+    //render and apear because showModal = true; it wont render because the showModal bool didnt change. So we need to make it false, so that when we click it updates to true, and
+    //causes the render, so that the modal appears because showModal is true ahah
 
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
@@ -51,27 +54,23 @@ export default function NFTBox({ price, nftAddress, tokenId, marketplaceAddress,
             tokenId: tokenId,
         },
     })
-
     async function updateUI() {
         const tokenURI = await getTokenURI()
         console.log(`The TokenURI is ${tokenURI}`)
-        // We are going to cheat a little here...
+        // We are going to cheat a little here. We're gonna force the website into doing http calls which will make the website a bit centralized. The thing is that since most
+        // browsers are not using IPFS yet, if we were calling from ipfs://, people not using brave/companion wouldnt see the nft images. It will change all browsers adopt
+        // IPFS. From what I got from Patrick there's no way to go around this to be 100% decentralized, but it's a thing to check in the future
         if (tokenURI) {
-            // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
+            // We'll use an IPFS Gateway: A server that will return IPFS files from a "normal" URL.
             const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")
             const tokenURIResponse = await (await fetch(requestURL)).json()
+            //fetch is basically a keyword in js to get what is in a url like we were using a browser. Its await fetch and await to convert that into a JSON file, nice!!
             const imageURI = tokenURIResponse.image
             const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
             setImageURI(imageURIURL)
             setTokenName(tokenURIResponse.name)
             setTokenDescription(tokenURIResponse.description)
-            // We could render the Image on our sever, and just call our sever.
-            // For testnets & mainnet -> use moralis server hooks
-            // Have the world adopt IPFS
-            // Build our own IPFS gateway
         }
-        // get the tokenURI
-        // using the image tag from the tokenURI, get the image
     }
 
     useEffect(() => {
@@ -80,20 +79,22 @@ export default function NFTBox({ price, nftAddress, tokenId, marketplaceAddress,
         }
     }, [isWeb3Enabled])
 
-    const isOwnedByUser = seller === account || seller === undefined
+    const isOwnedByUser = seller === account || seller === undefined //nice way to make a bool to know if the seller is the account connected or not
     const formattedSellerAddress = isOwnedByUser ? "you" : truncateStr(seller || "", 15)
 
     const handleCardClick = () => {
         isOwnedByUser
-            ? setShowModal(true)
-            : buyItem({
+            ? setShowModal(true) //super smart this way to show the modal (modal is the pop up that we get to update the price). we change useState, it renders, and then its true in the html
+            : //basically to have a pop up is to have a useState bool connected to a isVisible, then when we click to change bool useState, renders, isVisible is now true, super smart
+              //this isVisible is a variable from the modal we imported from web3uikit I think, dunno whats the one to use normally but easy to find
+              buyItem({
                   onError: (error) => console.log(error),
                   onSuccess: handleBuyItemSuccess,
               })
     }
 
     const handleBuyItemSuccess = async (tx) => {
-        await tx.wait(1)
+        await tx.wait(1) //this is the way we make sure that the transaction is mined, and only then after the await we send the notification
         dispatch({
             type: "success",
             message: "Item bought!",

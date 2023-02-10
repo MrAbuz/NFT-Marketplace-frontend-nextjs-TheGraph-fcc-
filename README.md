@@ -1,4 +1,4 @@
-Nextjs Nft Marketplace with Moralis - Plan:
+Nextjs Nft Marketplace with The Graph - Plan:
 
 1. Home Page:
     1. Show recently listed NFTs
@@ -11,9 +11,11 @@ Nextjs Nft Marketplace with Moralis - Plan:
 
 Things to fix:
 
- Thing to change: will need to look later into the fact that we're passing the basic NFT ABI to the frontend in order to use it to get the tokenURI. If I'm making an nftmarketplace for a lot of different nfts, I should be coding it in a way to get the token URI of the nft that we get from the events without a hardcoded "abi".
+Will need to look later into the fact that we're passing the basic NFT ABI to the frontend in order to use it to get the tokenURI. If I'm making an nftmarketplace for a lot of different nfts, I should be coding it in a way to get the token URI of the nft that we get from the events without a hardcoded "abi".
 Since I got the signature of the call ("tokenURI()"), I could make a call to that address with this as calldata.
 Or we can probably use just a smaller ABI with just the tokenURI parts, which probably is the same for most ERC721. This is probably a good option aswell.
+Its probably okay if we want to list other nft aswell with this hardcoded ABI now that I'm thinking as most of the code from this ABI is from the standart ERC721, and the tokenURI() 
+function should be named the same (check) 
 
 The events emited from smart contracts are stored in a data structure that is on-chain, but smart contracts can't access it. But off-chain services like The Graph / Moralis do!
 We will index the events off-chain and then read from our database.
@@ -25,11 +27,23 @@ Even tho Moralis adds a centralized component, the bulk of our protocol would st
 Tho there are some protocols that are centralized that are important to the space, like Etherscan, Opensea.
 We're learning Moralis so that we're familiar with working with centralized servers in case we want to make an aplication in the future that provides a centralized service.
 
-With the Graph, we will:
-1. Index them with The Graph
-2. Read from The Graph
-
 As far as I know, Mappings are not loopable, arrays are. So indexed events help us manage the mappings info (and others) to include in our frontends.
+ 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 Patrick:
 - [Full-Stack Setup](#full-stack-setup)

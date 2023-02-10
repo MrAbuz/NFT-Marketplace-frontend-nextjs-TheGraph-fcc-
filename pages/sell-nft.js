@@ -18,10 +18,11 @@ export default function Home() {
     const { runContractFunction } = useWeb3Contract()
 
     async function approveAndList(data) {
+        //data is the data coming from the input on "Form" (that we using from web3uikit)
         console.log("Approving...")
         const nftAddress = data.data[0].inputResult
         const tokenId = data.data[1].inputResult
-        const price = ethers.utils.parseUnits(data.data[2].inputResult, "ether").toString()
+        const price = ethers.utils.parseUnits(data.data[2].inputResult, "ether").toString() //looks like we always toString() after ethers.utils.parseEther() or parseUnit()
 
         const approveOptions = {
             abi: nftAbi,
@@ -103,7 +104,7 @@ export default function Home() {
             setupUI()
         }
     }, [proceeds, account, isWeb3Enabled, chainId])
-
+    //{ethers.utils.formatUnits(price, "ether")}
     return (
         <div className={styles.container}>
             <Form
